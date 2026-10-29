@@ -1,0 +1,71 @@
+-- Trading Post Mission Filter - @VARIANT_LABEL@
+-- RENDERED FILE - do not edit; edit src/mission.lua.in and src/patches.tsv
+-- and run make release.
+--
+-- Updated by SavageCore
+--
+-- What it does: the yellow mission terminal at outer space trading
+-- posts offers a mix of mission types, weighted so the package
+-- delivery run is rare. This rewrites the board weights so the
+-- picked type wins nearly every roll.
+
+local VariantLabel = "@VARIANT_LABEL@"
+
+local ModDesc = "@DESC@"
+
+local ModName     = "Trading Post Mission Filter"
+local ModAuthor   = "SavageCore"
+local GameVersion = "v7.10"
+
+-- Every value this variant patches, rendered from src/patches.tsv.
+local Patches = {
+@PATCHES@
+}
+
+-- Group the patches by file. Each entry gets its own MXML block
+-- matched by MissionID, so the other nine entries are untouched.
+-- MXML_CHANGE_TABLE is a LIST of change blocks even when there is
+-- only one, so the block list is wrapped in an outer table. Handing
+-- AMUMSS a bare block instead makes it report "MXML_CHANGE_TABLE does
+-- not contain any usable TABLE", make 0 changes, and ship nothing.
+local fileOrder = {}
+local byFile = {}
+
+for _, patch in ipairs(Patches) do
+    if byFile[patch.file] == nil then
+        byFile[patch.file] = {}
+        fileOrder[#fileOrder + 1] = patch.file
+    end
+    table.insert(byFile[patch.file], patch)
+end
+
+local MbinChangeTable = {}
+
+for _, file in ipairs(fileOrder) do
+    local blocks = {}
+    for _, patch in ipairs(byFile[file]) do
+        blocks[#blocks + 1] = {
+            ["SPECIAL_KEY_WORDS"] = {"MissionID", patch.entry},
+            ["VALUE_CHANGE_TABLE"] = {
+                {patch.prop, patch.value},
+            },
+        }
+    end
+    MbinChangeTable[#MbinChangeTable + 1] = {
+        ["MBIN_FILE_SOURCE"]  = {file},
+        ["MXML_CHANGE_TABLE"] = blocks,
+    }
+end
+
+NMS_MOD_DEFINITION_CONTAINER = {
+    ["MOD_FILENAME"]    = ModName.." - "..VariantLabel..".pak",
+    ["MOD_DESCRIPTION"] = ModDesc,
+    ["MOD_AUTHOR"]      = ModAuthor,
+    ["NMS_VERSION"]     = GameVersion,
+    ["MODIFICATIONS"]   =
+    {
+        {
+            ["MBIN_CHANGE_TABLE"] = MbinChangeTable,
+        },
+    },
+}

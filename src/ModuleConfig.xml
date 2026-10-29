@@ -1,0 +1,49 @@
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="http://qconsulting.ca/fo3/ModConfig5.0.xsd">
+  <moduleName>Trading Post Mission Filter</moduleName>
+  <installSteps order="Explicit">
+    <installStep name="Choose which missions the trading post offers">
+      <optionalFileGroups order="Explicit">
+        <group name="Mission type" type="SelectExactlyOne">
+          <plugins order="Explicit">
+            <plugin name="Package delivery only">
+              <description>Only package delivery missions. The board keeps offering the Postie delivery run; complete one and return for another.</description>
+              <files>
+                <folder source="postie-only" destination="Trading Post Mission Filter" priority="0" />
+              </files>
+              <typeDescriptor>
+                <type name="Optional" />
+              </typeDescriptor>
+            </plugin>
+            <plugin name="Asteroid mining only">
+              <description>Only asteroid mining missions. The board keeps offering belt mining work; complete one and return for another.</description>
+              <files>
+                <folder source="asteroid-only" destination="Trading Post Mission Filter" priority="0" />
+              </files>
+              <typeDescriptor>
+                <type name="Optional" />
+              </typeDescriptor>
+            </plugin>
+            <plugin name="Salvage only">
+              <description>Only salvage missions. The board keeps offering hulk and junk recovery work; complete one and return for another.</description>
+              <files>
+                <folder source="salvage-only" destination="Trading Post Mission Filter" priority="0" />
+              </files>
+              <typeDescriptor>
+                <type name="Optional" />
+              </typeDescriptor>
+            </plugin>
+            <plugin name="Slime cleanup only">
+              <description>Only slime and biohazard cleanup missions. The board keeps offering that work; complete one and return for another.</description>
+              <files>
+                <folder source="slime-only" destination="Trading Post Mission Filter" priority="0" />
+              </files>
+              <typeDescriptor>
+                <type name="Optional" />
+              </typeDescriptor>
+            </plugin>
+          </plugins>
+        </group>
+      </optionalFileGroups>
+    </installStep>
+  </installSteps>
+</config>
